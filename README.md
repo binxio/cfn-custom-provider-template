@@ -36,6 +36,9 @@ until the following command succeeds:
 make test
 ```
 
+The source implements a ResourceProvider class defined by Python module [cfn\_resource\_provider](https://pypi.python.org/pypi/cfn-resource-provider).
+
+
 ## Deploying the provider
 Set the variable `S3_BUCKET_PREFIX` and `AWS_REGION` in the Makefile to point to your bucket (See [#S3 buckets](#s3buckets) for details).
 
