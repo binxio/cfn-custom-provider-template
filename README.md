@@ -27,11 +27,9 @@ You need to have awscli, python, jq and Docker installed.
 
 
 ## Getting started
-the template contains all the stuff to create, test and deploy a simple provider.
+this template  contains all the stuff to create, test and deploy a simple Custom Resource provider for the resource [Custom::Custom](docs/Custom.md).
 
-The custom resource in the template [Custom::Custom](docs/Custom.md) copies the property `Value` as atttribute of the resource. 
-
-to experience a complete development cycle, you need to implement the `create`, `update` and `delete` methods in `src/cfn_custom_provider.py` 
+The idea is that the resource just copies the property `Value` to return it as an atttribute of the CFN resource.  To experience a complete development cycle, you need to implement the `create`, `update` and `delete` methods in `src/cfn_custom_provider.py` 
 until the following command succeeds:
 
 ```sh
@@ -57,16 +55,15 @@ make demo
 
 Now you are ready to create useful Custom CloudFormation Providers!
 
-Checkout https://github.com/binxio/cfn-kong-provider, https://github.com/binxio/cfn-secret-provider and https://github.com/binxio/cfn-ses-provider
-for example.
+Checkout [Kong API Gateway](https://github.com/binxio/cfn-kong-provider), [Secrets](https://github.com/binxio/cfn-secret-provider) and [SES](https://github.com/binxio/cfn-ses-provider) for example.
 
 ## S3 Buckets
 <a id="s3bucket"></a> 
-To deploy, you need to have one or more s3 buckets matching the name pattern:
+To deploy your lambda to all AWS regions, you need to have s3 buckets in all regions matching the name pattern:
 
 ```
    <s3-bucket-prefix>-<aws-region>
 ```
+For the development cycle, you need to have at least a bucket in your default region, for instance `binxio-public-eu-central-1`.
 
-If you want to allow easy deployment in all regions, make sure that the buckets
-are created in every region. You could use the [create-global-s3-buckets](https://github.com/binxio/create-global-s3-buckets) script.
+To ease the creation of all buckets, you could use the [create-global-s3-buckets](https://github.com/binxio/create-global-s3-buckets) script.
