@@ -5,7 +5,7 @@
     "Custom": {
       "Type": "Custom::Custom",
       "Properties": {
-        "Value":  "hello World!",
+        "Value":  "bye bye World!",
         "ServiceToken": { "Fn::Join": [ ":", [ "arn:aws:lambda", { "Ref": "AWS::Region" }, { "Ref": "AWS::AccountId" }, "function:cfn-custom-provider" ]]}
       }
     }

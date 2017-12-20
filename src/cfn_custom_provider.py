@@ -25,13 +25,14 @@ class CustomProvider(ResourceProvider):
         self.heuristic_convert_property_types(self.properties)
 
     def create(self):
-        self.fail('not yet implemented')
-        self.physical_resource_id = 'failed-to-create'
-        # use self.set_attribute() to set return values.
+	value = self.get('Value')
+	self.set_attribute('Value', value)
+        self.physical_resource_id = value
 
     def update(self):
-        self.fail('not yet implemented')
-        self.physical_resource_id = 'failed-to-create'
+	value = self.get('Value')
+	self.set_attribute('Value', value)
+        self.physical_resource_id = value
 
     def delete(self):
         self.success('nothing to do')
