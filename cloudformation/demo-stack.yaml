@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Custom Provider CloudFormation
+Resources:
+  Custom:
+    Type: Custom::Custom
+    Properties:
+      Value: bye bye World!
+      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:cfn-custom-provider'
+Outputs:
+  Value:
+    Description: The value returned by the Custom::Custom resource
+    Value: !GetAtt 'Custom.Value'
