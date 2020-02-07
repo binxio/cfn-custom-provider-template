@@ -9,14 +9,13 @@ request_schema = {
     "properties": {
         "Value": {
             "type": "string",
-            "description": "this value will be made accessible through  Fn::GetAtt, property 'Value'"
+            "description": "this value will be made accessible through  Fn::GetAtt, property 'Value'",
         }
-    }
+    },
 }
 
 
 class CustomProvider(ResourceProvider):
-
     def __init__(self):
         super(ResourceProvider, self).__init__()
         self.request_schema = request_schema
@@ -25,17 +24,18 @@ class CustomProvider(ResourceProvider):
         self.heuristic_convert_property_types(self.properties)
 
     def create(self):
-	value = self.get('Value')
-	self.set_attribute('Value', value)
+        value = self.get("Value")
+        self.set_attribute("Value", value)
         self.physical_resource_id = value
 
     def update(self):
-	value = self.get('Value')
-	self.set_attribute('Value', value)
+        value = self.get("Value")
+        self.set_attribute("Value", value)
         self.physical_resource_id = value
 
     def delete(self):
-        self.success('nothing to do')
+        self.success("nothing to do")
+
 
 provider = CustomProvider()
 
