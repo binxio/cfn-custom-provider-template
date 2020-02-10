@@ -89,14 +89,7 @@ delete-provider:
 
 demo:
 	aws cloudformation deploy --stack-name $(NAME)-demo \
-		--template-file ./cloudformation/demo-stack.yaml --capabilities CAPABILITY_NAMED_IAM \
-                --parameter-overrides \
-                        ApiKey=$(shell ./encrypt-secret CD98BD30-F944-4FD9-B86D-3F67664FBAEB);
-	docker build -t $(NAME)-demo -f Dockerfile.demo .
-	docker run -v  $(HOME)/.aws:/root/.aws \
-		-e AWS_REGION=$(shell aws configure get region) \
-		-e AWS_PROFILE=$${AWS_PROFILE:-default} \
-		$(NAME)-demo
+		--template-file ./cloudformation/demo-stack.yaml --capabilities CAPABILITY_NAMED_IAM
 
 delete-demo:
 	aws cloudformation delete-stack --stack-name $(NAME)-demo
