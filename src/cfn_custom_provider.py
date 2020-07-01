@@ -9,7 +9,7 @@ request_schema = {
     "properties": {
         "Value": {
             "type": "string",
-            # "minimum": 0, maximum: 1,  # "integer" type only
+            # "minimum": 0, "maximum": 1,  # "integer" type only
             # "default": "",  # use python natives for "integer" and "boolean" types
             "description": "this value will be made accessible through  Fn::GetAtt, property 'Value'",
         }
