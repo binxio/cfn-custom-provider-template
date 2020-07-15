@@ -8,6 +8,7 @@ pytest = "*"
 
 [packages]
 cfn-resource-provider = ">=0.8.6"
+boto3 = ">=1.14.14"
 
 [requires]
 python_version = "3.7"

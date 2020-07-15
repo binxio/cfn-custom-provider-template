@@ -1,0 +1,10 @@
+FROM python:3.7
+ARG PACKAGE=cfn-custom-provider-template
+WORKDIR /${PACKAGE}
+
+RUN apt-get update && apt-get install -y jq && apt-get install -y zip
+RUN pip install --upgrade pip
+# install awscli here to get a more recent version
+RUN pip install pipenv awscli
+
+ADD . .

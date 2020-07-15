@@ -1,11 +1,15 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Custom Provider CloudFormation
+Parameters:
+  FunctionName:
+    Type: String
+    Default: cfn-custom-provider-template
 Resources:
   Custom:
     Type: Custom::Custom
     Properties:
       Value: bye bye World!
-      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:cfn-custom-provider'
+      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${FunctionName}'
 Outputs:
   Value:
     Description: The value returned by the Custom::Custom resource
