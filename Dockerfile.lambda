@@ -1,19 +1,14 @@
 FROM python:3.7
 RUN apt-get update && apt-get install -y zip
-WORKDIR /lambda
+WORKDIR /cfn-provider
 
-ADD requirements.txt /tmp
-RUN pip install --quiet -t /lambda -r /tmp/requirements.txt
-ADD src/ /lambda/
-
-RUN find /lambda -type d -print0 | xargs -0 chmod ugo+rx && \
-    find /lambda -type f -print0 | xargs -0 chmod ugo+r
-
-RUN python -m compileall -q /lambda
+ADD requirements.txt .
+ADD src ./src
+ADD build.sh .
 
 ARG ZIPFILE=lambda.zip
-RUN zip --quiet -9r /${ZIPFILE}  .
+RUN chmod +x build.sh && ./build.sh
 
 FROM scratch
-ARG ZIPFILE
-COPY --from=0 /${ZIPFILE} /
+ARG ZIPFILE=lambda.zip
+COPY --from=0 /cfn-provider/${ZIPFILE} /

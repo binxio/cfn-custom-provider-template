@@ -1,0 +1,10 @@
+include Makefile
+
+NAME ?= $(shell basename $(PWD))
+S3_BUCKET_PREFIX ?= binxio-public
+AWS_REGION ?= eu-central-1
+
+target/$(NAME)-$(VERSION).zip: src/*.py requirements.txt
+	mkdir -p target/content
+	./build.sh
+	mv lambda.zip target/$(NAME)-$(VERSION).zip

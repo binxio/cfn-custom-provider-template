@@ -13,9 +13,12 @@ Parameters:
   S3BucketPrefix:
     Type: String
     Default: ''
+  FunctionName:
+    Type: String
+    Default: cfn-custom-provider-template
   CFNCustomProviderZipFileName:
     Type: String
-    Default: lambdas/cfn-custom-provider-latest.zip
+    Default: lambdas/cfn-custom-provider-template-latest.zip
 Conditions:
   DoNotAttachToVpc: !Equals
     - !Ref 'AppVPC'
@@ -36,10 +39,11 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
       Policies:
-        - PolicyName: CFNCustomProviderPolicy
+        - PolicyName: !Sub "lambda-${FunctionName}-execution"
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
+              # Permissions Required by Custom Resource
               - Effect: Allow
                 Action:
                   - ssm:GetParameter
@@ -50,10 +54,6 @@ Resources:
                   - kms:Encrypt
                 Resource:
                   - '*'
-              - Action:
-                  - logs:*
-                Resource: arn:aws:logs:*:*:*
-                Effect: Allow
   CFNCustomProvider:
     Type: AWS::Lambda::Function
     Properties:
@@ -61,8 +61,9 @@ Resources:
       Code:
         S3Bucket: !Sub '${S3BucketPrefix}-${AWS::Region}'
         S3Key: !Ref 'CFNCustomProviderZipFileName'
-      FunctionName: cfn-custom-provider
+      FunctionName: !Ref 'FunctionName'
       Handler: provider.handler
+      Timeout: 900
       MemorySize: 128
       Role: !GetAtt 'LambdaRole.Arn'
       VpcConfig: !If
@@ -72,3 +73,39 @@ Resources:
             - !Ref 'DefaultSecurityGroup'
           SubnetIds: !Ref 'PrivateSubnets'
       Runtime: python3.7
+  # Logging group and permissions
+  CFNCustomProviderLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn:
+      - CFNCustomProvider
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${CFNCustomProvider}
+      RetentionInDays: 7
+  LambdaLoggingPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Roles:
+        - !Ref 'LambdaRole'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: !GetAtt 'CFNCustomProviderLogGroup.Arn'
+      PolicyName: !Sub "lambda-${FunctionName}-logging"
+  # Required for asynchronous re-invoke
+  LambdaReinvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Roles:
+        - !Ref 'LambdaRole'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource: !GetAtt 'CFNCustomProvider.Arn'
+      PolicyName: !Sub "lambda-${FunctionName}-invoke"
