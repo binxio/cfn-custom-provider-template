@@ -12,4 +12,4 @@ def handler(request, context):
     if request["ResourceType"] == "Custom::Custom":
         return cfn_custom_provider.handler(request, context)
     else:
-        raise ValueError(f'No handler found for custom resource {request["ResourceType"]}')
+        return cfn_custom_provider.handler(request, context)
