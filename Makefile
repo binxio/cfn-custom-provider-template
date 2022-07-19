@@ -2,8 +2,9 @@ include Makefile.mk
 
 NAME=cfn-custom-provider
 S3_BUCKET_PREFIX=binxio-public
-AWS_REGION=$(shell echo 'import boto3; print(boto3.session.Session().region_name)' | python)
-ALL_REGIONS=$(shell printf "import boto3\nprint '\\\n'.join(map(lambda r: r['RegionName'], boto3.client('ec2').describe_regions()['Regions']))\n" | python | grep -v '^$(AWS_REGION)$$')
+AWS_REGION=$(shell aws configure get region)
+ALL_REGIONS=$(shell aws ec2 describe-regions --query 'join(`\n`,Regions[*].RegionName)' --output text | grep -v '^$(AWS_REGION)$$')
+
 
 
 help:
