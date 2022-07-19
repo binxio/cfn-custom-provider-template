@@ -6,8 +6,5 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 
-[packages]
-cfn-resource-provider = ">=0.8.6"
-
 [requires]
-python_version = "3.7"
+python_version = "3.9"
