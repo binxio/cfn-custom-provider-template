@@ -1,6 +1,6 @@
 import os
 import logging
-from . import cfn_custom_provider
+import cfn_custom_provider
 
 logging.basicConfig(level=os.getenv('LOG_LEVEL', 'INFO'))
 
