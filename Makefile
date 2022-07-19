@@ -2,7 +2,7 @@ include Makefile.mk
 
 NAME=cfn-custom-provider
 S3_BUCKET_PREFIX=binxio-public
-AWS_REGION=$(shell echo 'import boto3; print boto3.session.Session().region_name' | python)
+AWS_REGION=$(shell echo 'import boto3; print(boto3.session.Session().region_name)' | python)
 ALL_REGIONS=$(shell printf "import boto3\nprint '\\\n'.join(map(lambda r: r['RegionName'], boto3.client('ec2').describe_regions()['Regions']))\n" | python | grep -v '^$(AWS_REGION)$$')
 
 
@@ -96,3 +96,6 @@ delete-demo:
 	aws cloudformation delete-stack --stack-name $(NAME)-demo
 	aws cloudformation wait stack-delete-complete  --stack-name $(NAME)-demo
 
+
+bucket:
+	aws s3 mb s3://$(S3_BUCKET_PREFIX)-$(AWS_REGION)
