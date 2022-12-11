@@ -25,6 +25,10 @@ class CustomProvider(ResourceProvider):
     def convert_property_types(self):
         self.heuristic_convert_property_types(self.properties)
 
+    def is_valid_request(self):
+        # add more complex validation here.
+        return super.is_valid_request()
+
     def create(self):
         """Create the requested object and set a Resource ID.  See `update` for behaviors based on Resource ID."""
         value = self.get("Value")
