@@ -1,3 +1,5 @@
+Deprecated Nov 2024 -> replaced with https://github.com/binxio/cloudformation-custom-provider-template
+
 # cfn-custom-provider-template
 A template source directory for creating custom CloudFormation Providers.
 
